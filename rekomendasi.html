@@ -1,0 +1,227 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Penjualan</title>
+  <link href="assets/img/logo.png" rel="icon">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --tosca: #1abc9c;
+      --tosca-dark: #16a085;
+      --white: #ffffff;
+      --gray: #f9f9f9;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--gray);
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: var(--tosca);
+      color: var(--white);
+      padding: 20px 40px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header .slug-label {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      background-color: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    label, select, button {
+      font-size: 16px;
+    }
+
+    select, button {
+      padding: 8px 12px;
+      margin: 10px 5px 20px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: var(--tosca);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--tosca-dark);
+    }
+
+    #recommendationBox {
+      margin-top: 30px;
+      background: var(--gray);
+      padding: 20px;
+      border-left: 5px solid var(--tosca);
+      border-radius: 8px;
+    }
+
+    #noDataMessage {
+      display: none;
+      text-align: center;
+      margin: 40px 0;
+      font-size: 24px;
+      color: var(--tosca-dark);
+    }
+
+    canvas {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dashboard Penjualan</h1>
+    <div class="slug-label" id="slugLabel"></div>
+  </header>
+  <main>
+    <label>Pilih Bulan:</label>
+    <select id="monthSelect"></select>
+    <label>Pilih Tahun:</label>
+    <select id="yearSelect"></select>
+    <button onclick="loadSales()">Tampilkan Grafik</button>
+    <button onclick="runAnalytics()">Analisis Strategi AI</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+
+    <div id="noDataMessage">Belum ada data penjualan untuk bulan ini.</div>
+    <canvas id="salesChart" width="800" height="400"></canvas>
+
+    <div id="recommendationBox" style="display:none">
+      <h3>Rekomendasi Strategi AI</h3>
+      <p id="recommendationText"></p>
+    </div>
+  </main>
+
+  <script>
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      } catch {
+        return null;
+      }
+    }
+
+    const token = localStorage.getItem('token');
+    const decoded = parseJwt(token);
+    const slug = decoded?.slug;
+
+    if (!slug) {
+      alert('Gagal mengambil data pengguna. Silakan login ulang.');
+      window.location.href = '/login';
+    }
+    document.getElementById('slugLabel').innerText = `Toko: ${slug}`;
+
+    const monthSelect = document.getElementById('monthSelect');
+    const yearSelect = document.getElementById('yearSelect');
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    const noDataMessage = document.getElementById('noDataMessage');
+    let chart;
+
+    for (let m = 1; m <= 12; m++) {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.text = new Date(0, m - 1).toLocaleString('id-ID', { month: 'long' });
+      monthSelect.appendChild(opt);
+    }
+
+    const thisYear = new Date().getFullYear();
+    for (let y = thisYear - 2; y <= thisYear + 1; y++) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.text = y;
+      yearSelect.appendChild(opt);
+    }
+    monthSelect.value = new Date().getMonth() + 1;
+    yearSelect.value = new Date().getFullYear();
+
+    async function loadSales() {
+      const month = monthSelect.value;
+      const year = yearSelect.value;
+      const res = await fetch(`https://digiumkm.nasiuduklapangantenis.my.id/sales/${slug}/daily?month=${month}&year=${year}`, {
+        headers: { Authorization: `Bearer ${token}` }
+        });
+      const data = await res.json();
+
+      if (data.length === 0) {
+        noDataMessage.style.display = 'block';
+        console.log('📊 Data yang diterima:', data);
+        if (chart) chart.destroy();
+        return;
+      }
+      noDataMessage.style.display = 'none';
+
+      const labels = data.map(d => d.date);
+      const totals = data.map(d => d.total);
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{ label: 'Pendapatan Harian', data: totals, borderColor: '#1abc9c' }]
+        },
+        options: { responsive: true }
+      });
+    }
+
+    async function runAnalytics() {
+      const res = await fetch(`https://digiumkm.nasiuduklapangantenis.my.id/analytics/${slug}`
+, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      document.getElementById('recommendationBox').style.display = 'block';
+      document.getElementById('recommendationText').innerText =
+        `Total Pendapatan: Rp ${data.totalRevenue.toLocaleString('id-ID')}
+Total Pesanan: ${data.totalOrders}
+Produk Terlaris: ${data.topProduct}
+\nRekomendasi:\n${data.recommendation}`;
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const text = document.getElementById('recommendationText').innerText;
+      doc.text('Analisis Strategi Penjualan', 10, 10);
+      doc.text(text, 10, 20);
+      doc.save('analisis-strategi.pdf');
+    }
+
+    loadSales();
+  </script>
+</body>
+</html>

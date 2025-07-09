@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kelola Pesanan - Nasi Uduk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="assets/img/logo.png" rel="icon">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4fdfc;
+      padding: 20px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .top-bar h1 {
+      margin: 0;
+      color: #30c4b8;
+    }
+
+    .logout-btn {
+      background: crimson;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .order-card {
+      background: #212136;
+      color: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .order-items {
+      margin-top: 10px;
+    }
+
+    .order-items div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .actions {
+      margin-top: 15px;
+    }
+
+    .actions button,
+    .actions a {
+      margin-right: 10px;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-print { background: #40e0d0; color: #000; }
+    .btn-bluetooth { background: orange; color: #000; }
+    .btn-selesai { background: crimson; color: #fff; }
+
+    .total { text-align: right; font-weight: bold; margin-top: 10px; }
+
+    #no-orders-message {
+      color: #666;
+      text-align: center;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <h1>Kelola Pesanan</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div id="orders-list"></div>
+  <p id="no-orders-message" style="display:none;">Belum ada pesanan.</p>
+
+  <script>
+    const SERVER_URL = 'https://digiumkm.nasiuduklapangantenis.my.id';
+    const token = localStorage.getItem('token');
+    const slug = localStorage.getItem('slug');
+
+    if (!token || !slug) {
+      alert('Login terlebih dahulu');
+      location.href = './login-reg.html';
+    }
+
+    const ordersList = document.getElementById('orders-list');
+    const noMsg = document.getElementById('no-orders-message');
+
+    async function fetchOrders() {
+      const res = await fetch(`${SERVER_URL}/orders/pending`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) {
+        alert('Token tidak valid. Silakan login ulang.');
+        localStorage.clear();
+        location.href = 'login-reg.html';
+        return;
+      }
+
+      const orders = await res.json();
+      ordersList.innerHTML = '';
+
+      if (!orders.length) {
+        noMsg.style.display = 'block';
+        return;
+      }
+
+      noMsg.style.display = 'none';
+
+      orders.forEach(order => {
+        const div = document.createElement('div');
+        div.className = 'order-card';
+        div.id = `order-${order.order_id}`;
+
+        let itemsHTML = '';
+        order.items.forEach(item => {
+          itemsHTML += `
+            <div>
+              <span>${item.name} x${item.quantity}</span>
+              <span>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</span>
+            </div>
+            ${item.note ? `<div><small>Catatan: ${item.note}</small></div>` : ''}`;
+        });
+
+        const total = order.total_price || order.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+        const meja = isNaN(order.table) ? `Bungkus (${order.table})` : `Meja ${order.table}`;
+        const printUrl = `${SERVER_URL}/print/response?id=${order.order_id}`;
+
+        div.innerHTML = `
+          <div class="order-header">
+            <h3>Pesanan #${order.order_id}</h3>
+            <span>${meja}</span>
+          </div>
+          <div class="order-items">${itemsHTML}</div>
+          <p class="total">TOTAL: Rp ${total.toLocaleString('id-ID')}</p>
+          <div class="actions">
+            <button class="btn-print" onclick="printOrder(${order.order_id})">Cetak</button>
+            <a href="my.bluetoothprint.scheme://${printUrl}" class="btn-bluetooth">Bluetooth</a>
+            <button class="btn-selesai" onclick="completeOrder(${order.order_id})">Selesai</button>
+          </div>
+        `;
+        ordersList.appendChild(div);
+      });
+    }
+
+    async function printOrder(orderId) {
+      const printArea = document.getElementById(`order-${orderId}`);
+      const all = document.querySelectorAll('.order-card');
+      all.forEach(el => el.style.display = 'none');
+      printArea.style.display = 'block';
+      window.print();
+      all.forEach(el => el.style.display = '');
+
+      await fetch(`${SERVER_URL}/orders/${orderId}/printed`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      fetchOrders();
+    }
+
+    async function completeOrder(orderId) {
+      const confirmDelete = confirm('Yakin pesanan ini selesai dan akan dihapus?');
+      if (!confirmDelete) return;
+
+      await fetch(`${SERVER_URL}/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      document.getElementById(`order-${orderId}`)?.remove();
+    }
+
+    function logout() {
+      localStorage.clear();
+      location.href = './login-reg.html';
+    }
+
+    fetchOrders();
+    setInterval(fetchOrders, 5000);
+  </script>
+</body>
+</html>

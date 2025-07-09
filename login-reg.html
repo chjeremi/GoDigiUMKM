@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Daftar - Nasi Uduk Lapang Antenis</title>
+  <link href="assets/img/logo.png" rel="icon">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tosca: #40e0d0;
+      --tosca-dark: #30c4b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: #f4fdfc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background-color: white;
+      border: 2px solid var(--tosca);
+      border-radius: 12px;
+      padding: 30px 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 24px rgba(64, 224, 208, 0.2);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: var(--tosca-dark);
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--tosca);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+      margin-top: 8px;
+    }
+
+    button:hover {
+      background-color: var(--tosca-dark);
+    }
+
+    .message {
+      margin-top: 12px;
+      color: red;
+      text-align: center;
+    }
+
+    .toggle {
+      margin-top: 12px;
+      text-align: center;
+      color: #555;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div id="login-form">
+      <h2>Masuk UMKM</h2>
+      <input type="email" id="login-email" placeholder="Email" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <button onclick="login()">Masuk</button>
+      <div class="toggle" onclick="toggleForm('register')">Belum punya akun? Daftar</div>
+      <div class="message" id="login-message"></div>
+    </div>
+
+    <div id="register-form" style="display: none;">
+      <h2>Daftar UMKM</h2>
+      <input type="text" id="register-name" placeholder="Nama UMKM" />
+      <input type="email" id="register-email" placeholder="Email" />
+      <input type="password" id="register-password" placeholder="Password" />
+      <input type="text" id="register-slug" placeholder="Slug (contoh: warungmama)" />
+      <button onclick="register()">Daftar</button>
+      <div class="toggle" onclick="toggleForm('login')">Sudah punya akun? Masuk</div>
+      <div class="message" id="register-message"></div>
+    </div>
+  </div>
+
+  <script>
+    function toggleForm(form) {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      if (form === 'register') {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+      } else {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      }
+    }
+
+    async function login() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const message = document.getElementById('login-message');
+  message.textContent = '';
+
+  try {
+    const res = await fetch('https://digiumkm.nasiuduklapangantenis.my.id/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+    console.log('Respon login:', data); // DEBUG
+
+    if (res.ok && data.token) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('slug', data.slug);
+      console.log('Token disimpan:', data.token); // DEBUG
+      window.location.href = 'dashboard.html';
+    } else {
+      message.textContent = data.message || 'Login gagal';
+      console.warn('Login gagal:', data.message); // DEBUG
+    }
+  } catch (err) {
+    console.error('Error koneksi:', err);
+    message.textContent = 'Terjadi kesalahan koneksi';
+  }
+}
+
+
+    async function register() {
+      const name = document.getElementById('register-name').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const slug = document.getElementById('register-slug').value;
+      const message = document.getElementById('register-message');
+      message.textContent = '';
+
+      try {
+        const res = await fetch('https://digiumkm.nasiuduklapangantenis.my.id/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, slug })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('slug', data.slug);
+          window.location.href = `dashboard.html`;
+        } else {
+          message.textContent = data.message || 'Registrasi gagal';
+        }
+      } catch (err) {
+        console.error(err);
+        message.textContent = 'Terjadi kesalahan koneksi';
+      }
+    }
+  </script>
+</body>
+</html>
