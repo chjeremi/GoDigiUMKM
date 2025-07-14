@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UMKM Digital: Transformasi Bisnis dengan Kekuatan AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6TaYFAeBU/X9QdHTWyKfJ5RMPxHKEh/bQcve4NqTK5e1LzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+  <link href="logo.png" rel="icon">
+    
+    <style>
+        :root {
+            --primary-color: #1ABC9C; /* Hijau Tosca */
+            --secondary-color: #2ECC71; /* Hijau aksen lebih cerah */
+            --dark-text: #2C3E50; /* Biru gelap keabu-abuan */
+            --light-text: #7F8C8D; /* Abu-abu agak gelap */
+            --light-bg: #ECF0F1; /* Putih keabu-abuan terang */
+            --white-bg: #FFFFFF; /* Putih murni */
+            --border-color: #BDC3C7; /* Abu-abu border */
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+          max-width: 100%;
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+        }
+
+
+        /* --- Header & Navigation --- */
+        header {
+            background: var(--primary-color);
+            padding: 1rem 2rem;
+            color: white;
+            box-shadow: 0 2px 8px var(--shadow-medium);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header .logo h1 {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: var(--white-bg);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            position: relative; /* Penting untuk posisi menu hamburger */
+        }
+
+        nav .hamburger {
+            display: none; /* Sembunyikan hamburger secara default */
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white; /* Warna ikon hamburger */
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex; /* Menu desktop: tampilkan sebagai flex */
+            align-items: center;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--dark-text);
+        }
+
+        /* Tombol Login di Navigasi */
+        .btn-nav {
+            background-color: var(--secondary-color); /* Menggunakan warna aksen hijau */
+            color: white !important; /* Memastikan warna teks putih, override a:hover */
+            padding: 0.5rem 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-left: 15px; /* Memberi sedikit jarak dari item navigasi lain */
+            display: inline-block; /* Agar padding dan margin berfungsi */
+            line-height: normal; /* Mengatur ulang line-height default a */
+            white-space: nowrap; /* Mencegah teks patah baris */
+        }
+
+        .btn-nav:hover {
+            background-color: #27AE60; /* Sedikit lebih gelap saat hover */
+            transform: translateY(-2px);
+        }
+
+        /* --- Global Section Styling --- */
+        section {
+            max-width: 1000px;
+            margin: 3.5rem auto;
+            padding: 0 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+            font-weight: 700;
+        }
+
+        @media (max-width: 576px) {
+              h2 {
+                font-size: 1rem;
+              }
+            }
+
+/*         h2::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--secondary-color);
+            margin: 15px auto 0;
+            border-radius: 5px;
+        } */
+
+        p {
+            font-size: 1.05rem;
+            color: var(--light-text);
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px var(--shadow-light);
+            border: none;
+            cursor: pointer;
+            font-size: 1.05rem;
+        }
+
+        .btn:hover {
+            background-color: #16A085;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px var(--shadow-medium);
+        }
+
+        .btn-secondary {
+            background: var(--dark-text);
+            margin-left: 1.5rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #34495E;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            text-align: center;
+            padding: 5rem 1.5rem;
+            background: var(--white-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-medium);
+            margin-top: 2.5rem;
+        }
+
+        .hero h2 {
+            color: var(--dark-text);
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .hero h2::after {
+            display: none;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--light-text);
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+        }
+
+        /* --- Features Section --- */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2.5rem;
+        }
+
+        .card {
+            background: var(--white-bg);
+            border-radius: 12px;
+            padding: 2.2rem;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 10px 25px var(--shadow-medium);
+        }
+
+        .card .icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            color: var(--dark-text);
+            margin-top: 0;
+            font-size: 1.7rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 1.rem;
+            color: var(--light-text);
+        }
+
+        /* --- About Us Section --- */
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-content .text-content {
+            flex: 2;
+/*             min-width: 350px; */
+        }
+
+        .about-content .image-content {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .about-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px var(--shadow-medium);
+            filter: grayscale(20%);
+            transition: filter 0.3s ease;
+        }
+        .about-content img:hover {
+            filter: grayscale(0%);
+        }
+
+        /* --- AI Integration Section --- */
+        .ai-integration-section {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4rem 1.5rem;
+            margin: 4rem auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-medium);
+            text-align: center;
+        }
+
+        .ai-integration-section h2 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .ai-integration-section h2::after {
+            background: var(--white-bg);
+        }
+
+        .ai-integration-section p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+        }
+        .ai-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .ai-feature-item {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: background-color 0.3s ease;
+        }
+        .ai-feature-item:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        .ai-feature-item h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+        }
+        .ai-feature-item p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* --- Testimonials Section --- */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-top: 2.5rem;
+        }
+
+        .testimonial-card {
+            background: var(--white-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            font-style: italic;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        .testimonial-card::before {
+            content: '“';
+            font-family: serif;
+            font-size: 5rem;
+            color: var(--secondary-color);
+            position: absolute;
+            top: 5px;
+            left: 15px;
+            opacity: 0.15;
+            line-height: 1;
+            z-index: 1;
+        }
+
+        .testimonial-card p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: var(--dark-text);
+            padding-top: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .testimonial-card .author {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-style: normal;
+            font-size: 1.05rem;
+            text-align: right;
+            margin-top: 1rem;
+            display: block;
+        }
+
+        /* --- FAQ Section --- */
+        .faq-item {
+            background: var(--white-bg);
+            border-radius: 10px;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-question {
+            padding: 1.2rem 1.8rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: var(--light-bg);
+        }
+
+        .faq-question .toggle-icon {
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            padding: 0 1.8rem 1.8rem;
+            font-size: 1.05rem;
+            color: var(--light-text);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out; /* Hapus padding dari transisi */
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px; /* Disesuaikan agar cukup untuk jawaban */
+            padding: 0 1.8rem 1.8rem;
+        }
+
+        .faq-item.active .faq-question .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        /* --- Contact Section --- */
+        .contact-info {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--white-bg);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-info p {
+            margin: 0.8rem 0;
+            color: var(--dark-text);
+        }
+
+        .contact-info strong {
+            color: var(--primary-color);
+        }
+
+        .contact-info .social-links {
+            margin-top: 2rem;
+        }
+
+        .contact-info .social-links a {
+            display: inline-block;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin: 0 18px;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .contact-info .social-links a:hover {
+            color: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            font-size: 0.95rem;
+            background: var(--dark-text);
+            color: white;
+            margin-top: 5rem;
+            border-top: 1px solid #34495E;
+        }
+
+        footer p {
+            margin: 0.6rem 0;
+            color: #BDC3C7;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--secondary-color);
+        }
+
+      
+    
+@media (max-width: 576px) {
+  .card h3 {
+    font-size: 1.2rem;
+    word-break: break-word;
+    line-height: 1.4;
+  }
+
+  .hero h2 {
+    font-size: 2rem;
+    padding: 0 1rem;
+  }
+}
+
+</style>
+
+     <style>
+    :root {
+      --primary-color: #1ABC9C;
+      --secondary-color: #2ECC71;
+      --dark-text: #2C3E50;
+      --light-text: #7F8C8D;
+      --light-bg: #ECF0F1;
+      --white-bg: #FFFFFF;
+      --border-color: #BDC3C7;
+      --shadow-light: rgba(0, 0, 0, 0.08);
+      --shadow-medium: rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.7;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      background: var(--primary-color);
+      padding: 1rem 2rem;
+      color: white;
+      box-shadow: 0 2px 8px var(--shadow-medium);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo h1 {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      color: var(--white-bg);
+    }
+
+    nav {
+      position: relative;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: white;
+    }
+
+    .login{
+        overflow: visible;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .btn-nav {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 992px) {
+      .hamburger {
+        display: block;
+      }
+
+      
+      nav ul {
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: var(--primary-color);
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+      }
+
+      nav ul.open {
+        max-height: 600px; /* Ditinggikan agar cukup untuk semua item */
+      }
+
+      nav ul li {
+        width: 100%;
+        padding: 1rem;
+        text-align: left;
+        border-top: 1px solid rgba(255,255,255,0.1);
+      }
+    }
+
+    .hamburger.active i::before {
+      content: "\f00d"; /* icon X dari Font Awesome */
+    }
+  </style>
+</head>
+<body class="container">
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="" style="width: 100px;">
+        </div>
+        <nav>
+            <div class="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <ul>
+                <li><a href="#beranda">Beranda</a></li>
+                <li><a href="#fitur">Fitur</a></li>
+                <li><a href="#ai-integration">AI Integrasi</a></li>
+                <li><a href="#tentang">Tentang Kami</a></li>
+                <li><a href="#testimoni">Testimoni</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+                <li><a href="login-reg.html" class="btn-nav login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="beranda" class="hero">
+        <h2>Transformasi Bisnis UMKM dengan Kekuatan <span style="color: turquoise;text-align: center;">Artificial Intelligence</span></h2>
+        <p>UMKM Digital adalah platform inovatif yang memberdayakan Usaha Mikro, Kecil, dan Menengah (UMKM) untuk mencapai kesuksesan di era digital. Dengan integrasi teknologi AI canggih seperti <span style="color: turquoise;">Gemini</span>, kami membantu Anda membuat <span style="color: turquoise;">keputusan bisnis yang lebih efisien dan efektif</span>, mulai dari analisis pasar hingga strategi pemasaran yang dipersonalisasi. Bawa bisnis Anda ke level berikutnya dengan <span style="color: turquoise;">analitik prediktif dan rekomendasi cerdas</span> yang didukung AI.</p>
+        <div>
+            <a href="login-reg.html" class="btn">Mulai Transformasi Digital Anda</a>
+            <a href="#ai-integration" class="btn btn-secondary">Pelajari Integrasi AI</a>
+        </div>
+    </section>
+
+    <section id="fitur">
+        <h2>Fitur Unggulan untuk Akselerasi Bisnis Anda</h2>
+        <p style="text-align: center; max-width: 750px; margin: 1rem auto 2.5rem; color: var(--light-text);">Kami menyediakan seperangkat alat komprehensif yang dirancang khusus untuk memenuhi kebutuhan unik UMKM, memastikan pertumbuhan yang berkelanjutan dan kompetitif di pasar digital.</p>
+        <div class="features">
+            <div class="card">
+                <i class="fas fa-store icon"></i>
+                <h3>Toko Online Berbasis Data</h3>
+                <p>Buat dan kelola etalase digital Anda dengan tampilan modern dan intuitif. Optimalkan katalog produk berdasarkan data perilaku konsumen untuk meningkatkan konversi dan pengalaman belanja.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-chart-line icon"></i>
+                <h3>Analitik Penjualan Prediktif</h3>
+                <p>Dapatkan wawasan mendalam tentang performa bisnis Anda. AI kami menganalisis tren penjualan, memprediksi permintaan, dan mengidentifikasi peluang pertumbuhan untuk strategi yang lebih cerdas.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-robot icon"></i>
+                <h3>Rekomendasi Strategi Pemasaran AI</h3>
+                <p>Manfaatkan kecerdasan buatan untuk menyusun kampanye pemasaran yang efektif. Gemini membantu Anda mengidentifikasi target audiens, mengoptimalkan penawaran, dan meningkatkan ROI iklan.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-truck-fast icon"></i>
+                <h3>Manajemen Logistik Cerdas</h3>
+                <p>Integrasi dengan berbagai pilihan jasa pengiriman dan optimasi rute. AI kami dapat membantu memprediksi waktu pengiriman optimal dan mengelola inventori secara efisien.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-headset icon"></i>
+                <h3>Dukungan Pelanggan Berbasis AI</h3>
+                <p>Sistem dukungan pelanggan yang responsif, dilengkapi dengan chatbot AI untuk FAQ instan dan panduan awal, memastikan bantuan cepat dan efisien kapan pun Anda membutuhkannya.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-shield-alt icon"></i>
+                <h3>Keamanan Data Tingkat Enterprise</h3>
+                <p>Platform kami dibangun dengan standar keamanan data tertinggi, melindungi informasi bisnis dan transaksi pelanggan Anda dari ancaman siber. Fokus pada inovasi, biarkan kami menjaga keamanan data Anda.</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 3.5rem;">
+            <a href="#" class="btn">Jelajahi Semua Fitur Canggih</a>
+        </div>
+    </section>
+
+    <section id="ai-integration" class="ai-integration-section">
+        <h2>Bagaimana Artificial Intelligence (Gemini) Memberdayakan UMKM Anda?</h2>
+        <p>Integrasi **AI Gemini** adalah jantung dari platform UMKM Digital. Gemini bukan hanya alat, melainkan mitra cerdas yang memproses data kompleks, mengidentifikasi pola tersembunyi, dan memberikan wawasan aksi nyata yang sebelumnya hanya bisa diakses oleh perusahaan besar.</p>
+        <div class="ai-features-grid">
+            <div class="ai-feature-item">
+                <h3>Analisis Perilaku Konsumen Akurat</h3>
+                <p>Gemini menganalisis data interaksi pelanggan untuk memahami preferensi, pola pembelian, dan sentimen, memungkinkan Anda menyesuaikan penawaran produk dan komunikasi dengan presisi.</p>
+            </div>
+            <div class="ai-feature-item">
+                <h3>Optimasi Harga Dinamis</h3>
+                <p>Berdasarkan kondisi pasar, data pesaing, dan permintaan, Gemini merekomendasikan strategi penetapan harga yang optimal untuk memaksimalkan keuntungan tanpa mengorbankan daya saing.</p>
+            </div>
+            <div class="ai-feature-item">
+                <h3>Personalisasi Pemasaran Otomatis</h3>
+                <p>Kirim pesan pemasaran yang sangat relevan kepada segmen pelanggan yang tepat. Gemini membantu menciptakan pengalaman personal yang meningkatkan loyalitas dan konversi.</p>
+            </div>
+            <div class="ai-feature-item">
+                <h3>Prediksi Tren Pasar Masa Depan</h3>
+                <p>Dapatkan keunggulan kompetitif dengan kemampuan AI untuk memprediksi tren produk yang sedang berkembang dan perubahan preferensi konsumen, memungkinkan Anda beradaptasi lebih cepat.</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 3.5rem;">
+            <a href="#" class="btn btn-secondary" style="background-color: var(--white-bg); color: var(--primary-color);">Dapatkan Wawasan AI Anda</a>
+        </div>
+    </section>
+
+    <section id="tentang container">
+        <h2>Visi & Misi UMKM Digital</h2>
+        <div class="about-content">
+            <div class="text-content">
+                <p style="text-align: center;">Didirikan pada awal tahun 2024, UMKM Digital berawal dari pemahaman mendalam akan tantangan dan potensi UMKM di Indonesia. Kami melihat bahwa akses ke teknologi canggih seperti Artificial Intelligence (AI) adalah kunci untuk membuka pintu pertumbuhan luar biasa bagi pelaku usaha kecil dan menengah.</p>
+                <p style="text-align: center;">Kami memiliki visi untuk menjadi katalisator utama digitalisasi UMKM, memberdayakan mereka dengan alat yang bukan hanya memudahkan operasional, tetapi juga menyediakan kecerdasan bisnis untuk pengambilan keputusan yang cepat, akurat, dan berbasis data.</p>
+                <p style="text-align: center;">Misi kami adalah mendemokratisasi AI, menjadikannya mudah diakses dan terintegrasi secara mulus dalam setiap aspek operasional UMKM, memastikan setiap pemilik usaha dapat bersaing secara global dengan strategi yang efisien dan efektif.</p>
+                <p style="text-align: center;">Tim kami terdiri dari inovator teknologi, ilmuwan data, dan pakar bisnis yang berdedikasi penuh untuk merealisasikan visi ini, didukung oleh semangat kolaborasi dan inovasi berkelanjutan.</p>
+                <a href="#kontak" class="btn">Hubungi Tim Ahli Kami</a>
+            </div>
+            <div class="image-content">
+                <img src="g1.png">
+            </div>
+        </div>
+    </section>
+
+    <section id="testimoni">
+        <h2>Keberhasilan Mitra UMKM Kami dengan AI</h2>
+        <p style="text-align: center; max-width: 750px; margin: 1rem auto 2.5rem; color: var(--light-text);">Dengarkan langsung dari para pelaku UMKM yang telah merasakan dampak nyata dari integrasi AI dalam operasional dan pengambilan keputusan bisnis mereka.</p>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>"Fitur analisis AI di UMKM Digital adalah game changer! Saya jadi tahu persis kapan harus restock dan produk mana yang harus dipromosikan lebih gencar. Omzet naik 30% dalam 3 bulan."</p>
+                <span class="author">— Ibu Dewi, Pemilik 'Kedai Kopi Digital'</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Rekomendasi AI Gemini sangat spesifik dan akurat untuk bisnis fashion saya. Kampanye pemasaran jadi jauh lebih efektif, dan saya bisa fokus pada desain tanpa pusing soal strategi."</p>
+                <span class="author">— Pak Surya, Desainer 'Batik Modern Nusantara'</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Sebelumnya, keputusan inventori saya seringkali spekulatif. Kini, dengan prediksi AI, saya bisa mengelola stok dengan sangat efisien, mengurangi kerugian dan meningkatkan keuntungan."</p>
+                <span class="author">— Kak Lia, Pengelola 'Toko Oleh-oleh Kreatif'</span>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 3.5rem;">
+            <a href="#" class="btn btn-secondary">Bagikan Kisah Sukses Anda</a>
+        </div>
+    </section>
+
+    <section id="faq">
+        <h2>Pertanyaan Umum seputar AI & Digitalisasi UMKM</h2>
+        <p style="text-align: center; max-width: 750px; margin: 1rem auto 2.5rem; color: var(--light-text);">Temukan jawaban atas pertanyaan paling sering diajukan mengenai bagaimana teknologi AI kami dapat membantu mengembangkan UMKM Anda.</p>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    Bagaimana AI Gemini membantu UMKM mengambil keputusan yang lebih baik?
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    AI Gemini memproses data penjualan, perilaku pelanggan, tren pasar, dan data eksternal lainnya. Dari analisis ini, Gemini memberikan **wawasan prediktif**, seperti produk mana yang akan populer, kapan waktu terbaik untuk promosi, atau bagaimana mengoptimalkan harga, sehingga UMKM dapat membuat keputusan yang **efisien, efektif, dan berbasis data** tanpa perlu keahlian data science mendalam.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Apakah data bisnis saya aman ketika digunakan oleh AI?
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Keamanan data adalah prioritas utama kami. Semua data dienkripsi dengan standar tertinggi dan diproses sesuai dengan **kebijakan privasi** yang ketat. AI Gemini hanya menggunakan data untuk memberikan wawasan dan rekomendasi yang relevan untuk bisnis Anda, tidak untuk tujuan lain.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Apakah saya memerlukan keahlian teknis atau data science untuk menggunakan fitur AI?
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Sama sekali tidak! Fitur AI kami dirancang untuk **sangat intuitif dan mudah digunakan**. Anda akan mendapatkan rekomendasi dan analisis dalam bahasa yang mudah dipahami melalui dasbor yang user-friendly, tanpa perlu latar belakang teknis atau data science.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Bagaimana UMKM Digital dapat diintegrasikan dengan sistem saya saat ini?
+                    <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Platform kami dirancang untuk memiliki **API yang fleksibel** untuk integrasi dengan berbagai sistem bisnis umum (misalnya, sistem POS atau akuntansi). Tim teknis kami juga siap memberikan panduan dan bantuan untuk proses integrasi yang mulus.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="kontak">
+        <h2>Hubungi Tim Inovasi Kami</h2>
+        <p style="text-align: center; max-width: 750px; margin: 1rem auto 2.5rem; color: var(--light-text);">Kami berkomitmen untuk mendukung perjalanan digitalisasi UMKM Anda. Jangan ragu untuk menghubungi kami untuk pertanyaan lebih lanjut atau demonstrasi fitur AI kami.</p>
+        <div class="contact-info">
+            <p><strong>Email Dukungan:</strong> kristianjeremi528@gmail.com</p>
+            <p><strong>Email Kerjasama:</strong> kristianjeremi528@gmail.com</p>
+            <p><strong>WhatsApp Hotlines:</strong> +62 812-8557-2993 (Dukungan Teknis) | +62 812-8557-2993 (Info Penjualan)</p>
+            <p><strong>Alamat Kantor Pusat:</strong> Jl kramat pulo dalam 2 no f3, kelurahan kramat, kecamatan cenen, kota jakarta pusat, DKI Jakarta</p>
+            <div class="social-links">
+                <a href="https://facebook.com/umkmdigitalid" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com/umkmdigital_id" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://twitter.com/umkmdigital_id" target="_blank" aria-label="Twitter/X"><i class="fab fa-twitter"></i></a>
+                <a href="https://linkedin.com/company/umkmdigital" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://youtube.com/umkmdigital" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div style="margin-top: 2rem; border-radius: 8px; overflow: hidden;">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.36838392182!2d106.8228399750376!3d-6.21639899376662!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f44927b2e353%3A0x7d0e4c6c0b3d8f8a!2sJl.%20Teknologi%20No.18%2C%20Kb.%20Melati%2C%20Tanah%20Abang%2C%20Kota%20Jakarta%20Pusat%2C%20Daerah%20Khusus%20Ibukota%20Jakarta%2010230!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong>UMKM Digital: Memimpin Inovasi UMKM Indonesia dengan Kecerdasan Buatan.</strong></p>
+        <p>Gedung Inovasi Digital, Jl. Teknologi No. 18, Jakarta Pusat, DKI Jakarta, Indonesia, 10310</p>
+        <p>© 2025 UMKM Digital. Hak Cipta Dilindungi Undang-Undang. | <a href="#">Kebijakan Privasi</a> | <a href="#">Syarat & Ketentuan</a> | <a href="#">Peta Situs</a></p>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('nav ul li a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                const navUl = document.querySelector('nav ul');
+
+                // Tutup hamburger menu setelah klik (hanya jika menu terbuka)
+                if (navUl.classList.contains('open')) {
+                    navUl.classList.remove('open');
+                }
+
+                // Jika itu adalah anchor link lokal (dimulai dengan #)
+                if (targetId && targetId.startsWith('#')) {
+                    e.preventDefault(); // Mencegah perilaku default (loncat langsung)
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        console.warn(`Element with ID ${targetId} not found.`);
+                    }
+                }
+                // Jika itu adalah link ke halaman lain (misalnya login-reg.html), biarkan default browser
+                // Tidak perlu e.preventDefault() di sini untuk link eksternal atau file HTML lain
+            });
+        });
+
+        // Hamburger Menu Toggle
+        // Tambahan agar hamburger icon berubah jadi X
+document.querySelector('.hamburger').addEventListener('click', function () {
+    this.classList.toggle('active');
+            document.querySelector('nav ul').classList.toggle('open');
+        });
+
+        // FAQ Toggle Functionality
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', event => {
+                const faqItem = item.closest('.faq-item');
+                faqItem.classList.toggle('active');
+            });
+        });
+
+        // Intersection Observer for Section Fade-in
+        const sections = document.querySelectorAll('section');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2 // Trigger when 20% of the section is visible
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Stop observing once visible to prevent re-triggering
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+    </script>
+    <script src="https://kit.fontawesome.com/7fdbed4fef.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
