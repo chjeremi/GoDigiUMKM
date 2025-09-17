@@ -158,29 +158,29 @@
   <table>
     <thead>
       <tr>
-        <th>Nama Menu</th>
-        <th>Harga</th>
-        <th>Kategori</th>
-        <th>Ketersediaan</th>
+        <th>Menu Name</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Available</th>
       </tr>
     </thead>
     <tbody id="menu-body"></tbody>
   </table>
 
   <form id="add-form">
-    <h3>Tambah Menu Baru</h3>
+    <h3>Add New Menu</h3>
     <input type="text" id="name" placeholder="Nama menu" required />
     <input type="number" id="price" placeholder="Harga" required />
     <input type="text" id="category" placeholder="Kategori (bebas)" required />
-    <button type="submit">Tambah Menu</button>
+    <button type="submit">Add Menu</button>
   </form>
 
   <!-- QR Modal -->
   <div id="qr-modal" onclick="hideQR()">
     <div class="box" onclick="event.stopPropagation()">
-      <h3>Scan QR Toko Anda</h3>
+      <h3>Scan QR your shop</h3>
       <canvas id="qr-canvas"></canvas><br>
-      <button onclick="downloadQR()">Unduh QR</button>
+      <button onclick="downloadQR()">Download QR</button>
     </div>
   </div>
 
@@ -295,4 +295,5 @@
   </script>
 </body>
 </html>
+
 3
