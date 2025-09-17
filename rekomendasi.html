@@ -103,19 +103,19 @@
     <div class="slug-label" id="slugLabel"></div>
   </header>
   <main>
-    <label>Pilih Bulan:</label>
+    <label>select month:</label>
     <select id="monthSelect"></select>
     <label>Pilih Tahun:</label>
     <select id="yearSelect"></select>
-    <button onclick="loadSales()">Tampilkan Grafik</button>
-    <button onclick="runAnalytics()">Analisis Strategi AI</button>
+    <button onclick="loadSales()">Show chart</button>
+    <button onclick="runAnalytics()">AI Strategy Analysis</button>
     <button onclick="downloadPDF()">Download PDF</button>
 
-    <div id="noDataMessage">Belum ada data penjualan untuk bulan ini.</div>
+    <div id="noDataMessage">There is no sales data for this month yet.</div>
     <canvas id="salesChart" width="800" height="400"></canvas>
 
     <div id="recommendationBox" style="display:none">
-      <h3>Rekomendasi Strategi AI</h3>
+      <h3>AI Strategy Recommendations</h3>
       <p id="recommendationText"></p>
     </div>
   </main>
@@ -308,17 +308,17 @@
   // --- Panggil Gemini AI langsung di frontend ---
   async function getAIRecommendation(data) {
     const prompt = `
-      Kamu adalah asisten bisnis UMKM.
-      Data penjualan:
-      - Total pendapatan: Rp${data.totalRevenue}
-      - Total pesanan: ${data.totalOrders}
-      - Produk terlaris: ${data.topProduct}
+      You are an MSME business assistant.
+      Sales data:
+      - Total income: Rp${data.totalRevenue}
+      - Order total: ${data.totalOrders}
+      - Best selling product: ${data.topProduct}
 
-      Berikan rekomendasi strategi penjualan singkat, jelas, dan actionable.
+      Provide short, clear, and actionable sales strategy recommendations..
     `;
 
     // tampilkan loading message dulu
-    document.getElementById('recommendationText').innerText = "Sedang meminta rekomendasi AI...";
+    document.getElementById('recommendationText').innerText = "Is asking for AI recommendations...";
 
     const res = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDPtW3ZuqKjUxUE4wmgYL79bpqtoOAPwLU",
@@ -350,8 +350,8 @@
     document.getElementById('recommendationBox').style.display = 'block';
     document.getElementById('recommendationText').innerText =
       `Total Pendapatan: Rp ${data.totalRevenue.toLocaleString('id-ID')}
-Total Pesanan: ${data.totalOrders}
-Produk Terlaris: ${data.topProduct}
+Order Total: ${data.totalOrders}
+Best Selling Products: ${data.topProduct}
 
 Rekomendasi dari AI:
 ${aiRecommendation}`;
@@ -376,6 +376,7 @@ ${aiRecommendation}`;
   </script>
 </body>
 </html>
+
 
 
 
