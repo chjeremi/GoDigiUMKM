@@ -89,22 +89,22 @@
 <body>
   <div class="form-container">
     <div id="login-form">
-      <h2>Masuk UMKM</h2>
+      <h2>Login UMKM</h2>
       <input type="email" id="login-email" placeholder="Email" />
       <input type="password" id="login-password" placeholder="Password" />
       <button onclick="login()">Masuk</button>
-      <div class="toggle" onclick="toggleForm('register')">Belum punya akun? Daftar</div>
+      <div class="toggle" onclick="toggleForm('register')">don't have an account yet? Register</div>
       <div class="message" id="login-message"></div>
     </div>
 
     <div id="register-form" style="display: none;">
-      <h2>Daftar UMKM</h2>
+      <h2>Register UMKM</h2>
       <input type="text" id="register-name" placeholder="Nama UMKM" />
       <input type="email" id="register-email" placeholder="Email" />
       <input type="password" id="register-password" placeholder="Password" />
       <input type="text" id="register-slug" placeholder="Slug (contoh: warungmama)" />
       <button onclick="register()">Daftar</button>
-      <div class="toggle" onclick="toggleForm('login')">Sudah punya akun? Masuk</div>
+      <div class="toggle" onclick="toggleForm('login')">already have an account? Login</div>
       <div class="message" id="register-message"></div>
     </div>
   </div>
@@ -185,3 +185,4 @@
   </script>
 </body>
 </html>
+
